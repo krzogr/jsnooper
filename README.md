@@ -1,4 +1,4 @@
-# jsnooper
+# JSnooper
 Java instrumentation agent which enables to track object allocations in real time.
 
 # Introduction
