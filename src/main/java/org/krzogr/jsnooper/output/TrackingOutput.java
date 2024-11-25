@@ -17,6 +17,13 @@
 
 package org.krzogr.jsnooper.output;
 
+import java.io.File;
+
 public interface TrackingOutput extends AutoCloseable {
     void writeTrackingInfo(String trackingInfo);
+
+    /**
+     * Optional operation - returns file associated with this output or NULL.
+     */
+    File getFile();
 }

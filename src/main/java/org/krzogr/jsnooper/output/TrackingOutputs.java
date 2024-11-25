@@ -26,8 +26,6 @@ import static org.krzogr.jsnooper.tracking.TrackingUtils.closeQuietly;
 import static org.krzogr.jsnooper.tracking.TrackingUtils.getTrackingOutputFile;
 
 public class TrackingOutputs {
-
-
     public static TrackingOutput createNullTrackingOutput() {
         return NullTrackingOutput.instance;
     }
@@ -54,6 +52,11 @@ public class TrackingOutputs {
         }
 
         @Override
+        public File getFile() {
+            return null;
+        }
+
+        @Override
         public void close() {
         }
     }
@@ -62,6 +65,11 @@ public class TrackingOutputs {
         @Override
         public void writeTrackingInfo(String trackingInfo) {
             System.out.println(trackingInfo);
+        }
+
+        @Override
+        public File getFile() {
+            return null;
         }
 
         @Override
@@ -78,6 +86,11 @@ public class TrackingOutputs {
             this.file = file;
             this.writer = new BufferedWriter(new FileWriter(file));
             printHeader();
+        }
+
+        @Override
+        public File getFile() {
+            return file;
         }
 
         @Override

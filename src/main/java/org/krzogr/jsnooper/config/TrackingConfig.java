@@ -138,8 +138,9 @@ public class TrackingConfig {
         return !leafClasses.isEmpty();
     }
 
-    public void configureDefaults() {
+    public TrackingConfig configureDefaults() {
         configureDefaultLeafClasses();
+        return this;
     }
 
     private void configureDefaultLeafClasses() {

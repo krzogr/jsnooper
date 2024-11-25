@@ -20,8 +20,8 @@ package org.krzogr.jsnooper.socket;
 import java.io.*;
 import java.net.Socket;
 
-import static org.krzogr.jsnooper.tracking.ObjectTracker.startTracking;
-import static org.krzogr.jsnooper.tracking.ObjectTracker.stopTracking;
+import static org.krzogr.jsnooper.tracking.ObjectTracker.startObjectTracking;
+import static org.krzogr.jsnooper.tracking.ObjectTracker.stopObjectTracking;
 import static org.krzogr.jsnooper.tracking.TrackingUtils.closeQuietly;
 
 public class TrackingSocketSession {
@@ -79,9 +79,9 @@ public class TrackingSocketSession {
 
     private void runCommand(String command, Socket socket, BufferedWriter writer) throws IOException {
         if (START_COMMAND.equalsIgnoreCase(command)) {
-            startTracking();
+            startObjectTracking();
         } else if(STOP_COMMAND.equalsIgnoreCase(command)) {
-            stopTracking();
+            stopObjectTracking();
         } else if(QUIT_COMMAND.equalsIgnoreCase(command)) {
             socket.close();
         } else {

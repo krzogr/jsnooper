@@ -38,19 +38,21 @@ public class ObjectTracker {
         return control.isTrackingEnabled();
     }
 
-    public static synchronized void startTracking() {
+    public static synchronized void startObjectTracking() {
         if (!control.isTrackingEnabled()) {
             output = createTrackingOutput(config.getOutputDirectory(), config.getOutputFilePrefix());
             control.enableTracking();
         }
     }
 
-    public static synchronized void stopTracking() {
+    public static synchronized TrackingOutput stopObjectTracking() {
         control.disableTracking();
 
         TrackingOutput prevOutput = output;
         output = createNullTrackingOutput();
         closeQuietly(prevOutput);
+
+        return prevOutput;
     }
 
     public static void trackObject(Object obj) {
