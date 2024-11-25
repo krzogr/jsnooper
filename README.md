@@ -70,7 +70,7 @@ output-file-prefix=TEXT
 * *excluded-threads=VALUE*: Excludes given threads - objects allocated by these threads will not be tracked.
 * *included-threads=VALUE*: Includes given threads - objects allocated by these threads will be tracked. Has higher precedence than _excluded-threads_.
 * *output-directory=VALUE*: Path where output tracking files will be written.
-* *output-file-prefix*: Prefix used when creating tracking files. Current timestamp will be used as suffix.
+* *output-file-prefix=VALUE*: Prefix used when creating tracking files. Current timestamp will be used as suffix.
 
 If both _output-directory_ and _output-file-prefix_ are not specified, tracking data will be written to STDOUT.
 
