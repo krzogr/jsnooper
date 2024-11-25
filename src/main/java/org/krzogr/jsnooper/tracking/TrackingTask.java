@@ -63,24 +63,37 @@ public class TrackingTask {
         String sep = "";
 
         StackTraceElement[] frames = Thread.currentThread().getStackTrace();
-        for (int i = frames.length-1; i > 1; i--) {
-            StackTraceElement frame = frames[i];
-            String className = frame.getClassName();
+        int lastFrameIndex = getLastFrameIndex(frames, config);
 
-            if (className.startsWith("org.krzogr.jsnooper") || className.startsWith("java.lang.Object")) {
-                break;
-            }
+        for (int i = frames.length-1; i >= lastFrameIndex; i--) {
+            StackTraceElement frame = frames[i];
 
             buffer.append(sep);
             appendFrame(buffer, frame);
             sep = " -> ";
+        }
 
-            if (config.isLeafClass(frame.getClassName())) {
+        return buffer.toString();
+    }
+
+    private int getLastFrameIndex(StackTraceElement[] frames, TrackingConfig config) {
+        int lastFrameIndex = 2;
+        boolean hasLeafClasses = config.hasLeafClasses();
+
+        for (int i = 3; i < frames.length; i++) {
+            StackTraceElement frame = frames[i];
+            String className = frame.getClassName();
+
+            if (className.startsWith("org.krzogr.jsnooper") || className.startsWith("java.lang.Object")) {
+                lastFrameIndex = i + 1;
+            } else if (hasLeafClasses && config.isLeafClass(className)) {
+                lastFrameIndex = i;
+            } else {
                 break;
             }
         }
 
-        return buffer.toString();
+        return lastFrameIndex;
     }
 
     private void appendFrame(StringBuilder buffer, StackTraceElement frame) {

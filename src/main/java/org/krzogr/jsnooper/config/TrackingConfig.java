@@ -19,9 +19,9 @@ package org.krzogr.jsnooper.config;
 
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -134,12 +134,16 @@ public class TrackingConfig {
         return false;
     }
 
+    public boolean hasLeafClasses() {
+        return !leafClasses.isEmpty();
+    }
+
     public void configureDefaults() {
         configureDefaultLeafClasses();
     }
 
     private void configureDefaultLeafClasses() {
-        leafClasses = singletonList("java.");
+        leafClasses = asList("java.", "sun.");
     }
 
     private List<String> getStringList(Properties props, String key) {
