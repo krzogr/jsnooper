@@ -26,7 +26,9 @@ public class TrackingUtils {
 
     public static void closeQuietly(AutoCloseable output) {
         try {
-            output.close();
+            if (output != null) {
+                output.close();
+            }
         } catch (Exception e) {
             System.err.println("Error while closing " + output.getClass().getSimpleName() + ": " + e.getMessage());
         }
@@ -34,7 +36,7 @@ public class TrackingUtils {
 
     public static File getTrackingOutputFile(String outputDirectory, String outputFilePrefix) {
         String dir = outputDirectory != null ? outputDirectory : ".";
-        String prefix = outputFilePrefix != null ? outputFilePrefix : "object-trace-";
+        String prefix = outputFilePrefix != null ? outputFilePrefix : "snapshot-";
         String timestamp = LocalDateTime.now().format(formatter);
         return new File(dir, prefix + timestamp + ".csv");
     }

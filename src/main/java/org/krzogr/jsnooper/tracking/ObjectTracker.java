@@ -39,8 +39,10 @@ public class ObjectTracker {
     }
 
     public static synchronized void startTracking() {
-        output = createTrackingOutput(config.getOutputDirectory(), config.getOutputFilePrefix());
-        control.enableTracking();
+        if (!control.isTrackingEnabled()) {
+            output = createTrackingOutput(config.getOutputDirectory(), config.getOutputFilePrefix());
+            control.enableTracking();
+        }
     }
 
     public static synchronized void stopTracking() {
@@ -59,7 +61,7 @@ public class ObjectTracker {
                 scope.disableTracking();
                 task.trackObject(obj, scope, config, output);
             } catch (Exception e) {
-                System.err.println("Fatal error while tracking object: " + e.getMessage());
+                System.err.println("Error while tracking object: " + e.getMessage());
                 e.printStackTrace();
             } finally {
                 scope.enableTracking();

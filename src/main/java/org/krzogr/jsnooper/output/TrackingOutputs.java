@@ -41,7 +41,7 @@ public class TrackingOutputs {
         try {
             return new FileTrackingOutput(outFile);
         } catch (Exception e) {
-            System.err.println("Error while creating tracking file" + outFile.getAbsolutePath() + ": " + e.getMessage());
+            System.err.println("Error while creating output file " + outFile.getAbsolutePath() + ": " + e.getMessage());
             return NullTrackingOutput.instance;
         }
     }

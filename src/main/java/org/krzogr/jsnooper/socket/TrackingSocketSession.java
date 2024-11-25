@@ -34,7 +34,7 @@ public class TrackingSocketSession {
             runSessionLoop(socket);
         } catch (IOException e) {
             if (!socket.isClosed()) {
-                System.err.println("Fatal error while processing socket commands: " + e.getMessage());
+                System.err.println("Error while processing socket commands: " + e.getMessage());
                 closeQuietly(socket);
             }
         }
