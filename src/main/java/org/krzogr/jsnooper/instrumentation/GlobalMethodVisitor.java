@@ -45,4 +45,11 @@ public class GlobalMethodVisitor extends MethodVisitor {
       visitTypeInsn(Opcodes.CHECKCAST, getObjectArrayTypeSignature(type));
     }
   }
+
+  @Override
+  public void visitMultiANewArrayInsn(String descriptor, int numDimensions) {
+    super.visitMultiANewArrayInsn(descriptor, numDimensions);
+    visitMethodInsn(Opcodes.INVOKESTATIC, "org/krzogr/jsnooper/tracking/ObjectTracker", "trackAndReturnObject", "(Ljava/lang/Object;)Ljava/lang/Object;", false);
+    visitTypeInsn(Opcodes.CHECKCAST, descriptor);
+  }
 }
