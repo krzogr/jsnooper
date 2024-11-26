@@ -56,6 +56,10 @@ public class ObjectTracker {
     }
 
     public static void trackObject(Object obj) {
+        trackAndReturnObject(obj);
+    }
+
+    public static Object trackAndReturnObject(Object obj) {
         TrackingScope scope = control.getTrackingScope();
 
         if (scope.isTrackingEnabled()) {
@@ -69,5 +73,7 @@ public class ObjectTracker {
                 scope.enableTracking();
             }
         }
+
+        return obj;
     }
 }

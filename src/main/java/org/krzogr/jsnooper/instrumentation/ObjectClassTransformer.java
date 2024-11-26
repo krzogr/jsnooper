@@ -40,14 +40,16 @@ public class ObjectClassTransformer implements ClassFileTransformer {
                                       final ProtectionDomain protectionDomain, final byte[] classfileBuffer) {
     try {
       ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-      ClassVisitor classVisitor = new ObjectClassVisitor(Opcodes.ASM4, classWriter);
+      ClassVisitor classVisitor = new ObjectClassVisitor(Opcodes.ASM9, classWriter);
       ClassReader classReader = new ClassReader(classfileBuffer);
 
       classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
 
       return classWriter.toByteArray();
     } catch (Exception e) {
-      throw new RuntimeException("Fatal error while transforming class java.langObject: " + e.getMessage(), e);
+      System.err.println("Fatal error while transforming class " + className + ": " + e.getMessage());
+      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 }

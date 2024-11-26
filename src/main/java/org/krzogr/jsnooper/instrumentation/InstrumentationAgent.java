@@ -17,20 +17,24 @@
 
 package org.krzogr.jsnooper.instrumentation;
 
+import org.krzogr.jsnooper.config.TrackingConfig;
+
 import java.lang.instrument.Instrumentation;
 
 import static org.krzogr.jsnooper.config.TrackingInitializer.initTracking;
 
 public class InstrumentationAgent {
     public static void premain(final String agentArgs, final Instrumentation inst) {
-        initTracking(agentArgs);
+        TrackingConfig config = initTracking(agentArgs);
         inst.addTransformer(new ObjectClassTransformer(), true);
+        inst.addTransformer(new GlobalClassTransformer(config::canInstrumentClass), true);
         transformJavaLangObjectClass(inst);
     }
 
     public static void agentmain(final String agentArgs, final Instrumentation inst) {
-        initTracking(agentArgs);
+        TrackingConfig config = initTracking(agentArgs);
         inst.addTransformer(new ObjectClassTransformer(), true);
+        inst.addTransformer(new GlobalClassTransformer(config::canInstrumentClass), true);
         transformJavaLangObjectClass(inst);
     }
 

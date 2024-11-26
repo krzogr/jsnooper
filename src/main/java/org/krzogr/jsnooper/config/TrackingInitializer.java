@@ -24,13 +24,13 @@ import static org.krzogr.jsnooper.socket.TrackingSocketThread.startTrackingSocke
 import static org.krzogr.jsnooper.tracking.ObjectTracker.getTrackingConfig;
 
 public class TrackingInitializer {
-    public static void initTracking(String argsString) {
+    public static TrackingConfig initTracking(String argsString) {
         preloadInternalClasses();
         TrackingConfig config = getTrackingConfig();
 
         if (argsString == null || argsString.isEmpty()) {
             config.configureDefaults();
-            return;
+            return config;
         }
 
         String[] args = argsString.split(",");
@@ -47,6 +47,8 @@ public class TrackingInitializer {
         if (port != null) {
             startTrackingSocketThread(port);
         }
+
+        return config;
     }
 
     /**

@@ -29,7 +29,7 @@ public class ObjectClassVisitor extends ClassVisitor {
   @Override
   public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature, final String[] exceptions) {
     if (name.equals("<init>")) {
-      return new ObjectConstructorVisitor(Opcodes.ASM4, super.visitMethod(access, name, desc, signature, exceptions));
+      return new ObjectConstructorVisitor(Opcodes.ASM9, super.visitMethod(access, name, desc, signature, exceptions));
     } else {
       return super.visitMethod(access, name, desc, signature, exceptions);
     }

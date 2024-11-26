@@ -26,10 +26,15 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 public class TrackingConfig {
+    private static final List<String> DefaultLeafClasses = asList("java.", "javax.", "sun.", "jdk.");
+    private static final List<String> DefaultExcludeClasses = asList("java.", "javax.", "sun.", "jdk.");
     private static final String MatchAll = "*";
 
     private List<String> excludedThreads;
     private List<String> includedThreads;
+
+    private List<String> excludeClasses;
+    private List<String> includeClasses;
     private List<String> leafClasses;
 
     private String outputDirectory;
@@ -39,6 +44,8 @@ public class TrackingConfig {
     public TrackingConfig() {
         excludedThreads = emptyList();
         includedThreads = emptyList();
+        excludeClasses = emptyList();
+        includeClasses = emptyList();
         leafClasses = emptyList();
         outputDirectory = null;
         outputFilePrefix = null;
@@ -68,6 +75,20 @@ public class TrackingConfig {
         leafClasses = requireNonNull(value);
     }
 
+    public List<String> getExcludeClasses() {
+        return excludeClasses;
+    }
+
+    public void setExcludeClasses(List<String> value) {
+        excludeClasses = requireNonNull(value);
+    }
+
+    public List<String> getIncludeClasses() {
+        return includeClasses;
+    }
+
+    public void setIncludeClasses(List<String> value) { includeClasses = requireNonNull(value); }
+
     public String getOutputDirectory() {
         return outputDirectory;
     }
@@ -93,16 +114,41 @@ public class TrackingConfig {
     }
 
     public void loadFrom(Properties props) {
+        excludeClasses = getStringList(props, "exclude-classes");
+        includeClasses = getStringList(props, "include-classes");
         leafClasses = getStringList(props, "leaf-classes");
+
         excludedThreads = getStringList(props, "excluded-threads");
         includedThreads = getStringList(props, "included-threads");
+
         outputDirectory = getString(props, "output-directory");
         outputFilePrefix = getString(props, "output-file-prefix");
         port = getInteger(props, "port");
 
+        if (!props.containsKey("exclude-classes")) {
+            configureDefaultExcludeClasses();
+        }
         if (!props.containsKey("leaf-classes")) {
             configureDefaultLeafClasses();
         }
+    }
+
+    public boolean canInstrumentClass(String className) {
+        for (int i = 0; i < includeClasses.size(); i++) {
+            String pattern = includeClasses.get(i);
+            if (pattern.equals(MatchAll) || className.startsWith(pattern)) {
+                return true;
+            }
+        }
+
+        for (int i = 0; i < excludeClasses.size(); i++) {
+            String pattern = excludeClasses.get(i);
+            if (pattern.equals(MatchAll) || className.startsWith(pattern)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean canTrackThread(String threadName) {
@@ -139,12 +185,17 @@ public class TrackingConfig {
     }
 
     public TrackingConfig configureDefaults() {
+        configureDefaultExcludeClasses();
         configureDefaultLeafClasses();
         return this;
     }
 
+    private void configureDefaultExcludeClasses() {
+        excludeClasses = DefaultExcludeClasses;
+    }
+
     private void configureDefaultLeafClasses() {
-        leafClasses = asList("java.", "sun.");
+        leafClasses = DefaultLeafClasses;
     }
 
     private List<String> getStringList(Properties props, String key) {
