@@ -39,7 +39,7 @@ public class ObjectClassTransformer implements ClassFileTransformer {
   private byte[] transformObjectClass(final ClassLoader loader, final String className, final Class<?> classBeingRedefined,
                                       final ProtectionDomain protectionDomain, final byte[] classfileBuffer) {
     try {
-      ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+      ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
       ClassVisitor classVisitor = new ObjectClassVisitor(Opcodes.ASM9, classWriter);
       ClassReader classReader = new ClassReader(classfileBuffer);
 
